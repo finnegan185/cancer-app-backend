@@ -1,17 +1,16 @@
 const trialCollection = require("../db").db().collection("trials");
 
-let Trial = function (trialNumber, type, stage, mutation, lineOfTherapy, needsMeasurabe, lifeExpectancy) {
+let Trial = function (trialNumber, type, stage, mutation, lineOfTherapy, needsMeasurable, lifeExpectancy) {
   this.trialNumber = trialNumber;
   this.type = type;
   this.stage = stage;
   this.mutation = mutation;
   this.lineOfTherapy = lineOfTherapy;
-  this.needsMeasurabe = needsMeasurabe;
+  this.needsMeasurable = needsMeasurable;
   this.lifeExpectancy = lifeExpectancy;
 };
 
 Trial.getMultiSelectDataByField = function (field) {
-  console.log("Fuck you?");
   return new Promise(async (resolve, reject) => {
     try {
       const fieldData = await trialCollection.distinct(field);
@@ -28,8 +27,6 @@ Trial.stupidSwitch = function (criteria) {
   criteria.forEach((el) => {
     switch (el.id) {
       case "type":
-        console.log("el.selectedData ", el.selectedData);
-        console.log("el.selectedData ", [...el.selectedData]);
         query.push({ type: { $elemMatch: { $in: el.selectedData } } });
         break;
       case "stage":
@@ -42,7 +39,10 @@ Trial.stupidSwitch = function (criteria) {
         query.push({ line: { $elemMatch: { $in: el.selectedData } } });
         break;
       case "expectancy":
-        query.push({ expectancy: { $elemMatch: { $in: el.selectedData } } });
+        query.push({ expectancy: { $in: el.selectedData } });
+        break;
+      case "needsMeasurable":
+        query.push({ needsMeasurable: el.needsMeasurable === true ? "Yes" : "No" });
         break;
       default:
         break;
@@ -62,10 +62,26 @@ Trial.getSearchResults = function (criteria) {
       });
       resolve(competingTrials);
     } catch (error) {
-      console.log(error);
       reject(error);
     }
     reject("failure");
+  });
+};
+
+Trial.getAllTrials = function () {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const allTrialsResponse = trialCollection.find({});
+      const allTrials = [];
+      await allTrialsResponse.forEach((trial) => {
+        allTrials.push(trial);
+      });
+      resolve(allTrials);
+    } catch (error) {
+      console.log(error);
+      reject();
+    }
+    reject();
   });
 };
 

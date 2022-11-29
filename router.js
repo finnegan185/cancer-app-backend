@@ -11,4 +11,6 @@ apiRouter.get("/", (req, res) => res.json("If you are seeing this then Zack Finn
 apiRouter.post("/competing-search-get-data", trialController.apiGetMultiSelectData);
 apiRouter.post("/competing-search-results", trialController.apiGetSearchResults);
 
+apiRouter.get("/all-trials", trialController.apiGetAllTrials);
+
 module.exports = apiRouter;

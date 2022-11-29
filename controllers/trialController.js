@@ -15,14 +15,29 @@ exports.apiGetMultiSelectData = async function (req, res) {
 };
 
 exports.apiGetSearchResults = async function (req, res) {
-  console.log("req.body.searchData: ", req.body.searchData);
   try {
     const competingTrials = await Trial.getSearchResults(req.body.searchData);
     if (competingTrials.length) {
       res.json(competingTrials);
+    } else {
+      res.json(null);
     }
-    res.json("No Trials");
   } catch (error) {
+    console.log(error);
+    res.json("failure");
+  }
+};
+
+exports.apiGetAllTrials = async function (req, res) {
+  try {
+    const allTrials = await Trial.getAllTrials();
+    if (allTrials.length) {
+      res.json(allTrials);
+    } else {
+      res.json(null);
+    }
+  } catch (error) {
+    console.log(error);
     res.json("failure");
   }
 };
