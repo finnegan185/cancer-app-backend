@@ -7,10 +7,14 @@ exports.apiGetMultiSelectData = async function (req, res) {
       promises.push(Trial.getMultiSelectDataByField(field));
     });
     const fieldsData = await Promise.all(promises);
-    res.json(fieldsData);
+    if (fieldsData.length) {
+      res.status(200).send(fieldsData);
+    } else {
+      res.status(204).send(null);
+    }
   } catch (error) {
     console.log(error);
-    res.json(error);
+    res.status(500).send("failure");
   }
 };
 
@@ -18,13 +22,13 @@ exports.apiGetSearchResults = async function (req, res) {
   try {
     const competingTrials = await Trial.getSearchResults(req.body.searchData);
     if (competingTrials.length) {
-      res.json(competingTrials);
+      res.status(200).send(competingTrials);
     } else {
-      res.json(null);
+      res.status(204).send(null);
     }
   } catch (error) {
     console.log(error);
-    res.json("failure");
+    res.status(500).send("failure");
   }
 };
 
@@ -32,12 +36,12 @@ exports.apiGetAllTrials = async function (req, res) {
   try {
     const allTrials = await Trial.getAllTrials();
     if (allTrials.length) {
-      res.json(allTrials);
+      res.status(200).send(allTrials);
     } else {
-      res.json(null);
+      res.status(204).send(null);
     }
   } catch (error) {
     console.log(error);
-    res.json("failure");
+    res.status(500).send("failure");
   }
 };

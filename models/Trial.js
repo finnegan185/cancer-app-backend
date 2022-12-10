@@ -14,10 +14,10 @@ Trial.getMultiSelectDataByField = function (field) {
   return new Promise(async (resolve, reject) => {
     try {
       const fieldData = await trialCollection.distinct(field);
-      resolve(fieldData);
+      resolve(fieldData.filter((n) => n));
     } catch (error) {
       console.log(error);
-      reject();
+      reject("Accessing the database data failed.");
     }
   });
 };
@@ -64,7 +64,7 @@ Trial.getSearchResults = function (criteria) {
     } catch (error) {
       reject(error);
     }
-    reject("failure");
+    reject("Accessing the database data failed.");
   });
 };
 
@@ -79,9 +79,9 @@ Trial.getAllTrials = function () {
       resolve(allTrials);
     } catch (error) {
       console.log(error);
-      reject();
+      reject(error);
     }
-    reject();
+    reject("Accessing the database data failed.");
   });
 };
 
