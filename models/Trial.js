@@ -22,7 +22,7 @@ Trial.getMultiSelectDataByField = function (field) {
   });
 };
 
-Trial.stupidSwitch = function (criteria) {
+Trial.querySwitch = function (criteria) {
   let query = [];
   criteria.forEach((el) => {
     switch (el.id) {
@@ -54,7 +54,7 @@ Trial.stupidSwitch = function (criteria) {
 Trial.getSearchResults = function (criteria) {
   return new Promise(async (resolve, reject) => {
     try {
-      const query = this.stupidSwitch(criteria);
+      const query = this.querySwitch(criteria);
       const competingTrialsResponse = trialCollection.find({ $and: query });
       const competingTrials = [];
       await competingTrialsResponse.forEach((trial) => {
